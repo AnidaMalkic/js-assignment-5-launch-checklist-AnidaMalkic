@@ -17,23 +17,67 @@ function addDestinationInfo(document, name, diameter, star, distance, moons, ima
 }
 
 function validateInput(testInput) {
+    if (testInput === "" || testInput === 0) {
+        return "Empty"
+    } else if (isNaN(Number(testInput))) {
+        return "Is A Number"
+    } else {
+        return "Not A Number"
+    }
    
+       
 }
 
 function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
-   
+//    LAUNCH INFO LIST ITEMS 
+    let launchStatus = document.getElementById("launchStatus");
+    let pilotStatus = document.getElementById("pilotStatus");
+    let copilotStatus = document.getElementById("copilotStatus");
+    let fuelStatus = document.getElementById("fuelStatus");
+    let cargoStatus = document.getElementById("cargoStatus");
+
+//    FORM INPUTS VALIDATION
+    if (validateInput(pilot) === "Empty" || validateInput(copilot) === "Empty" || validateInput(fuelLevel) === "Empty" || validateInput(cargoLevel) === "Empty") {
+        alert(`All fields are required!`)
+    } else if (isNaN(validateInput(fuelLevel)) || isNaN(validateInput(cargoLevel))) {
+        alert(`Make sure to enter valid information for each field!`)
+    } else if (!isNaN(validateInput(pilot)) || !isNaN(validateInput(copilot))) {
+        alert (`Make sure to enter valid information for each field!`)
+    } else {
+        pilotStatus.innerHTML = `Pilot ${pilot} is ready for launch`
+        copilotStatus.innerHTML = `Co-pilot ${copilot} is ready for launch` 
+    }
+
+    // FUEL AND CARGO LEVEL CHECK
+    if (Number(fuelLevel) < 10000) {
+        list.styles.visibility = "visible"
+        fuelStatus.innerHTML = "Fuel level too low for launch"
+        launchStatus.styles.color = "red"
+        launchStatus.innerHTML = "Shuttle Not Ready for Launch"
+    } else if (Number(cargoLevel) > 10000) {
+        list.styles.visibility = "visible"
+        cargoStatus.innerHTML = "Cargo mass too heavy for launch"
+        launchStatus.styles.color = "#C7254E"
+        launchStatus.innerHTML = "Shuttle Not Ready for Launch"
+    } else {
+        list.styles.visibility = "visible"
+        launchStatus.styles.color = "#419F6A"
+        launchStatus.innerHTML = "Shuttle is Ready for Launch"
+    }
+    
 }
 
 async function myFetch() {
     let planetsReturned;
 
-    planetsReturned = await fetch().then( function(response) {
-        });
-
+    planetsReturned = await fetch("https://handlers.education.launchcode.org/static/planets.json").then(function(response) {
+                 
+});
     return planetsReturned;
 }
 
 function pickPlanet(planets) {
+
 }
 
 module.exports.addDestinationInfo = addDestinationInfo;
