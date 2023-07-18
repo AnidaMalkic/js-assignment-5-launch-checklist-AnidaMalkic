@@ -3,23 +3,27 @@ require('isomorphic-fetch');
 
 function addDestinationInfo(document, name, diameter, star, distance, moons, imageUrl) {
    // Here is the HTML formatting for our mission target div.
-   /*
+   
+   let missionTarget = document.getElementById("missionTarget");
+    missionTarget.innerHTML =
+                `
                 <h2>Mission Destination</h2>
                 <ol>
-                    <li>Name: </li>
-                    <li>Diameter: </li>
+                    <li>Name: ${name}</li>
+                    <li>Diameter: ${diameter}</li>
                     <li>Star: ${star}</li>
-                    <li>Distance from Earth: </li>
-                    <li>Number of Moons: </li>
+                    <li>Distance from Earth: ${distance}</li>
+                    <li>Number of Moons: ${moons}</li>
                 </ol>
-                <img src="">
-   */
+                <img src="${imageUrl}">
+                `
 }
 
 function validateInput(testInput) {
-    if (testInput === "" || testInput === 0) {
+
+    if (testInput === "") {
         return "Empty"
-    } else if (isNaN(Number(testInput))) {
+    } else if (!isNaN(Number(testInput))) {
         return "Is A Number"
     } else {
         return "Not A Number"
@@ -39,29 +43,29 @@ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
 //    FORM INPUTS VALIDATION
     if (validateInput(pilot) === "Empty" || validateInput(copilot) === "Empty" || validateInput(fuelLevel) === "Empty" || validateInput(cargoLevel) === "Empty") {
         alert(`All fields are required!`)
-    } else if (isNaN(validateInput(fuelLevel)) || isNaN(validateInput(cargoLevel))) {
-        alert(`Make sure to enter valid information for each field!`)
-    } else if (!isNaN(validateInput(pilot)) || !isNaN(validateInput(copilot))) {
+    } else if ((validateInput(fuelLevel)) === "Not A Number" || (validateInput(cargoLevel)) === "Not A Number") {
+        alert(`Make sure to enter valid information for each fieldsssss!`)
+    } else if ((validateInput(pilot)) === "Is A Number" || (validateInput(copilot)) === "Is A Number") {
         alert (`Make sure to enter valid information for each field!`)
     } else {
         pilotStatus.innerHTML = `Pilot ${pilot} is ready for launch`
-        copilotStatus.innerHTML = `Co-pilot ${copilot} is ready for launch` 
+        copilotStatus.innerHTML = `Co-pilot ${copilot} is ready for launch`
     }
 
     // FUEL AND CARGO LEVEL CHECK
     if (Number(fuelLevel) < 10000) {
-        list.styles.visibility = "visible"
+        list.style.visibility = "visible"
         fuelStatus.innerHTML = "Fuel level too low for launch"
-        launchStatus.styles.color = "red"
+        launchStatus.style.color = "red"
         launchStatus.innerHTML = "Shuttle Not Ready for Launch"
     } else if (Number(cargoLevel) > 10000) {
-        list.styles.visibility = "visible"
+        list.style.visibility = "visible"
         cargoStatus.innerHTML = "Cargo mass too heavy for launch"
-        launchStatus.styles.color = "#C7254E"
+        launchStatus.style.color = "#C7254E"
         launchStatus.innerHTML = "Shuttle Not Ready for Launch"
-    } else {
-        list.styles.visibility = "visible"
-        launchStatus.styles.color = "#419F6A"
+    }  else {
+        list.style.visibility = "visible"
+        launchStatus.style.color = "#419F6A"
         launchStatus.innerHTML = "Shuttle is Ready for Launch"
     }
     
@@ -71,13 +75,15 @@ async function myFetch() {
     let planetsReturned;
 
     planetsReturned = await fetch("https://handlers.education.launchcode.org/static/planets.json").then(function(response) {
-                 
+        response.json();     
 });
     return planetsReturned;
 }
 
 function pickPlanet(planets) {
+    let chosenPlanet = planets[Math.floor(Math.random() * planets.length)]
 
+    return chosenPlanet
 }
 
 module.exports.addDestinationInfo = addDestinationInfo;
